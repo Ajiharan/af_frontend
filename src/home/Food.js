@@ -1,5 +1,7 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./common.css";
+import { useHistory } from "react-router-dom";
 const Food = () => {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
@@ -7,11 +9,12 @@ const Food = () => {
   const [size, setSize] = useState("");
   const [categoryList, setCategoryList] = useState([]);
   const [categories, setCategory] = useState([]);
+  const history = useHistory();
 
- const handleChange = (e) => {
-    let value = Array.from(e.target.selectedOptions, option => option.value);
-     setCategory(value);
-  }
+  const handleChange = (e) => {
+    let value = Array.from(e.target.selectedOptions, (option) => option.value);
+    setCategory(value);
+  };
   useEffect(() => {
     axios
       .get("http://localhost:5000/category/getAll")
@@ -22,68 +25,108 @@ const Food = () => {
         console.log(err.response.data);
       });
   }, []);
-    
+
   const submitData = (e) => {
     e.preventDefault();
-        axios.post("http://localhost:5000/food/add", { name,amount,size,categories,code }).then(res => {
-            console.log(res.data);
-        }).catch(err => {
-            console.log(err);
+    axios
+      .post("http://localhost:5000/food/add", {
+        name,
+        amount,
+        size,
+        categories,
+        code,
       })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="container">
-      <h3 className="text-info">Add category</h3>
+      <input
+        type="button"
+        onClick={() => {
+          history.push("/");
+        }}
+        className="m-2 btn btn-dark"
+        value="Home"
+      />
+      <input
+        type="button"
+        onClick={() => {
+          history.push("/category");
+        }}
+        className="m-2 btn btn-dark"
+        value="Add Category"
+      />
+      <h3 className="text-info">Add Food</h3>
       <form
+        className="form"
         onSubmit={(e) => {
           submitData(e);
         }}
       >
-        <label>Code</label>
-        <input
-          type="text"
-          value={code}
-          required
-          onChange={(e) => setCode(e.target.value)}
-        />
-        <br />
-        <br />
-        <label>Name</label>
-        <input
-          type="text"
-          value={name}
-          required
-          onChange={(e) => setName(e.target.value)}
-        />
-        <br />
-        <br />
-        <label>Amount</label>
-        <input
-          type="number"
-          value={amount}
-          required
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <br />
-        <br />
-        <label>size</label>
-        <input
-          type="number"
-          value={size}
-          required
-          onChange={(e) => setSize(e.target.value)}
-        />
-        <br />
-        <br />
-       
-        <select value={categories} onChange={(e) => handleChange(e)} multiple>
-          <option value="">All Food</option>
-          {categoryList.map((res) => (
-            <option key={res._id} value={res._id}>
-              {res.name}
-            </option>
-          ))}
-        </select>
+        <div className="mb-3">
+          <label>Code</label>
+          <input
+            type="text"
+            value={code}
+            className="form-control"
+            required
+            onChange={(e) => setCode(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          {" "}
+          <label>Name</label>
+          <input
+            type="text"
+            value={name}
+            required
+            className="form-control"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          {" "}
+          <label>Amount</label>
+          <input
+            type="number"
+            value={amount}
+            required
+            className="form-control"
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          {" "}
+          <label>size</label>
+          <input
+            type="number"
+            value={size}
+            className="form-control"
+            required
+            onChange={(e) => setSize(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+        
+          <select value={categories} onChange={(e) => handleChange(e)} multiple>
+            <option value="">All Food</option>
+            {categoryList.map((res) => (
+              <option key={res._id} value={res._id}>
+                {res.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <input type="submit" value="Add category" className="btn btn-danger" />
       </form>
     </div>

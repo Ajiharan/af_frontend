@@ -5,7 +5,8 @@ const FoodList = () => {
     const history = useHistory();
   const [foodList, setFoodList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
-  const [category, setCategory] = useState("");
+    const [category, setCategory] = useState("");
+    const [total, setTotal] = useState(0);
   useEffect(() => {
     axios
       .get("http://localhost:5000/food/getAll")
@@ -63,7 +64,8 @@ const FoodList = () => {
           ))}
               </select>
               <input type='button' onClick={()=>{history.push("/category")}} className="m-2 btn btn-dark" value="Add category" />
-              <input type='button' onClick={()=>{history.push("/food")}} className="m-2 btn btn-dark" value="Add Food"/>
+              <input type='button' onClick={() => { history.push("/food") }} className="m-2 btn btn-dark" value="Add Food" />
+              <p className='lead'>Total Price : { total}</p>
       </div>
       <h2 className="text-danger p-2">Food list</h2>
       {foodList.map((res) => (
@@ -71,7 +73,8 @@ const FoodList = () => {
           <p>{res.name}</p>
           <p>{res.code}</p>
           <p>{res.amount}</p>
-          <p>{res.size}</p>
+              <p>{res.size}</p>
+              <button className="btn btn-danger" onClick={()=>setTotal(total+res.amount)} style={{"width":"150px"}}>Add order</button>
         </div>
       ))}
     </div>

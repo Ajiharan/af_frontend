@@ -4,6 +4,8 @@ const Category = () => {
     const [name, setName] = useState('');
     const [desc, setDesc] = useState("");
 
+    
+
     const submitData = (e) => {
         e.preventDefault();
         axios.post("http://localhost:5000/category/add", { name: name, description: desc }).then(res => {

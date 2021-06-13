@@ -29,7 +29,15 @@ const FoodList = () => {
   }, []);
   useEffect(() => {
     console.log(category);
-    if (category === "") {
+      if (category === "") {
+        axios
+        .get("http://localhost:5000/food/getAll")
+        .then((res) => {
+          setFoodList(res.data);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
     } else {
       axios
         .get(`http://localhost:5000/food/get/${category}`)
